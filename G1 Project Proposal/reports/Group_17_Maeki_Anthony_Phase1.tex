@@ -1,0 +1,113 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{times}
+\usepackage{pdfpages}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{setspace}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{Group 17 - Page \thepage}
+
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{}{0pt}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{}{0pt}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\small\bfseries}{}{0pt}{}
+
+\setstretch{1.5}
+\begin{document}
+
+{\centering \LARGE
+
+\vspace*{2.5in}
+
+
+{\bfseries Dataset \& Research Proposal}\\ \ \\
+CS577-13:Principles and Techniques of Data Science\\
+Professor Manju Muralidharan\\ \ \\
+Authors: Maeki Kashana \& Anthony Alarcon\\
+\today
+
+}
+
+\newpage
+\tableofcontents
+\newpage
+
+
+\section{Section 1: Title}
+
+"Tracking the Changes in the Amount of Houses Sold, the Amount of Newly Listed Houses, the Median Sale Prices, the Houses Currently Listed for Sale, etc. Over a Decade Across 50 States using Housing Market Data to Discover the Growth or Decline of the Housing Market in Specific States"
+
+\section{Section 2: Research Question}
+"How has the housing market changed over the period of a decade across the fifty U.S, states and have these housing markets in these states remained relatively similar throughout this time frame, or have they experienced either a substantial growth or decline in their markets?
+
+Our group is aiming to investigate and describe the change over time of the housing market across the 50 states, which will include analyzing the median sale price, listing price per square foot of these properties, the amount of listings sold or currently listed for sale, and various other metrics per state in the ten-year time period.. Consequently, our project can be best described as being descriptive since our project aims to describe the housing market of each state through the use of the various metrics in this dataset. For example, \underline{one row in my dataset represents} information regarding the date of the data, the state, which is California, the date in which the data was last updated by Redfin (the date goes from month to month for each state), the region type, the region id, the amount of listings sold, the median sale price, the listing price per square foot, the median days on market for a listing, the amount of new listings, the amount of active listings, and the amount of pending sales.
+\section{Section 3: Dataset Information}
+\begin{enumerate}
+	\item Dataset source (URL)\\
+		\url{https://www.redfin.com/news/data-center/downloads/}
+	\item How the data was collected (if known)\\
+		According to the Redfin website, this data offers a detailed snapshot of U.S. residential real estate activity, which includes the full cycle of a home sale; from initial listing through closing. This data is updated on a weekly and monthly basis. \\
+		They mention that the dataset covers rolling four-week windows. They stated that aggregating over 4 weeks provides more stable values, particularly for smaller markets. They measure year-over-year changes in the dataset of sales prices and listings. Year over year comparisons look back 52 weeks to "preserve alignment".
+
+		Lastly, they mention that all metrics cover residential properties, which includes single family homes, condo/co-op, town-house, and multi-family houses. They also note that their data is defined consistently with the US Office of Management and Budget metropolitan divisions where they exist, and metropolitan statistical areas elsewhere.
+	\item License or access type (public, API, Kaggle, etc.)\\
+		This data is publicly available for download.
+	\item Number of rows\\
+		There are over 6000 rows, which is more than sufficient to perform detailed data analysis using pandas.
+	\item Number of columns\\
+		There are a total of 20 columns. A lot of these columns include the year-to-year changes of other columns. For example, Median Price has a YoY Median price. This is true for many of the columns.
+	\item Data types (numeric, categorical, text, date)\\
+		Since there are so many columns, it is to be expected that there are a lot of data types. Without checking the type of the data using pandas, the data appears to be a mix of numerical values, date values, and string objects (categorical values like state and state names).
+	\item Time range (if applicable)\\
+		The time range for this dataset was something that was specified in the website. Our group chose the time frame from Jan. 2016 to Aug. 2026, which is a gap of over 10 years.
+	\item Known limitations of the dataset\\
+		The most obvious limitation of this dataset is that it looks at the entire state for calculating the median price of homes. Because of this, the value that is shown in the median price column of the dataset misrepresents the very expensive homes in certain regions of the state, particularly urban cities with a large population. For example, one of the rows I briefly looked at showed that the median house pricing for California is around 700K. However, this median price does not represent affluent areas of California, such as the City of Los Angeles or San Francisco. In fact, the median pricing of houses in these areas is around one million, which is much larger than the median pricing of California shown in the dataset. Because of the aforementioned information, one looking to settle in and buy housing in urban areas of states should not solely rely on this data. Because it is likely that the data is misrepresenting prices in urban areas.
+
+		Another limitation of this dataset is that, despite the fact that it lists US territories like Guam or Puerto Rico as part of the US states, the data for the Housing Prices for these territories is unavailable. I am quite confounded at the fact these territories are present in the dataset despite the fact that I only included the 50 states when creating this dataset through the Redfin website and these territories contain no housing data so they serve no purpose in the dataset.
+\end{enumerate}
+\section{Section 4: Planned EDA Questions}
+
+These are the questions we will actually try to answer in Phase 2. They are tied to columns in the Redfin monthly state file, not generic ``is the data clean'' checks.
+
+\begin{enumerate}
+\item What is the distribution of \texttt{MEDIAN SALE PRICE NSA (\$)} across states, and how does that distribution shift from 2016 to 2026? We want a histogram or boxplot by year so we can see whether prices just moved up together or some states pulled away.
+
+\item Where are the missing values? From a first pass, about 119 rows are empty on \texttt{HOMES SOLD}, \texttt{MEDIAN SALE PRICE NSA (\$)}, \texttt{PENDING SALES}, and the YoY versions of those columns. We will count the percent missing by \texttt{REGION NAME} because it looks like Puerto Rico, Guam, and the U.S. Virgin Islands account for almost all of it, not California or Texas.
+
+\item Are there outliers in the year-over-year percent columns? \texttt{NEW LISTINGS YOY (\%)} has a max around 1689\% and \texttt{PENDING SALES YOY (\%)} goes over 800\%. We will check whether those spikes are small markets (Alaska, Vermont, territories) where a small change in listings blows up the percent, or if they are real market shocks.
+
+\item How correlated are \texttt{HOMES SOLD}, \texttt{NEW LISTINGS}, \texttt{ACTIVE LISTINGS}, \texttt{PENDING SALES}, and \texttt{MEDIAN SALE PRICE NSA (\$)}? If sold, pending, and new listings all move together, that matters later when we pick predictors so we do not put three copies of the same idea in a regression.
+
+\item How does median sale price and homes sold change over the 128 months for a few specific states (California, Texas, Florida, New York) versus a smaller market like Wyoming or Vermont? This is the ``how does X vary across Y over time'' question from the prompt.
+
+\item Is there a seasonal pattern in \texttt{HOMES SOLD} and \texttt{NEW LISTINGS}? Housing usually picks up in spring, so we will group by month of \texttt{PERIOD BEGIN} and see if that shows up in every state or only some of them.
+\end{enumerate}
+
+\section{Section 5: Anticipated Challenges}
+
+\begin{enumerate}
+\item Missing data in the territory rows. \texttt{HOMES SOLD}, \texttt{MEDIAN SALE PRICE NSA (\$)}, and \texttt{PENDING SALES} are blank for most Puerto Rico months and some Virgin Islands / Guam months. If we leave those in, means and year-over-year plots will look broken. Plan: drop Guam, Puerto Rico, and the Virgin Islands for the main analysis, and keep the 50 states plus D.C. (``Columbia'' in the file).
+
+\item State medians hide city prices. This is already a limitation of the file. \texttt{MEDIAN SALE PRICE NSA (\$)} for California is one number for the whole state, so it will not match what someone pays in San Francisco. That is fine for a state-level descriptive project, but we cannot talk like this is house-level data. One row is one state in one month, not one house.
+
+\item The YoY percent columns are unstable in small states. If Alaska only sells a few hundred homes, \texttt{NEW LISTINGS YOY (\%)} can jump hundreds of points. That will create fake ``outliers'' if we treat every percent the same. Plan: look at raw counts (\texttt{HOMES SOLD}, \texttt{NEW LISTINGS}) next to the percents, and maybe winsorize or log the percents before any model.
+
+\item Dates are stored as text. \texttt{PERIOD BEGIN} and \texttt{PERIOD END} need to be parsed into datetime before we can plot a time series or pull the month. Easy in pandas, but if we forget, groupby year will not work.
+
+\item Later phases want regression, and a lot of these columns measure the same market. \texttt{HOMES SOLD}, \texttt{PENDING SALES}, and \texttt{ACTIVE LISTINGS} will probably be collinear. We will have to pick one target (most likely \texttt{MEDIAN SALE PRICE NSA (\$)} or \texttt{HOMES SOLD}) and a smaller set of predictors so the model is not just listing the same thing four ways.
+\end{enumerate}
+
+\end{document}
+
+
